@@ -1,0 +1,53 @@
+###################################
+#config file
+###################################
+
+###################################
+# MANDATORY PART OF THE CONFIG-FILE
+###################################
+
+####
+#prove insertion site data
+####
+#name of your dataset / output folder (no spaces); you can provide multiple names separated by ","
+datasets: ["DLBCLPB", "DLBCLSB", "Intestinal", "cuSCC", "Liver", "AML"]
+insertionFile: ["Input/BEDInsertionTesting/DLBCLPB.BED","Input/BEDInsertionTesting/DLBCLSB.BED","Input/BEDInsertionTesting/Intestinal.BED","Input/BEDInsertionTesting/cuSCC.BED","Input/BEDInsertionTesting/Liver.BED", "Input/BEDInsertionTesting/AML.BED"] # insert file path here; you can provide multiple names separated by "," CAUTION: Please order "datasets" and "insertionFile" to match each other.
+
+####
+#define transposon system
+####
+
+transposonSystem: ["PB", "SB", "SB", "SB","SB","PB"] #("PB" or "SB") Please provide the transposon system for each dataset separated by ","
+###################################
+#OPTIONAL PART OF THE CONFIG FILE
+###################################
+
+####
+# which version of the mutagenesis model is used?
+####
+
+#please choose one of:
+#"pretrainedModel": use pre-calculated insertion rates based on mESC data)
+#"noMutagenesis": use no mutagenesis model, TransMiCron will control only for the distribution of TA / TTAA sites
+#"predefinedFeatures": retrain the mutagenesis model on your own insertion data, using our pre-defined features
+#"customFeatures": retrain the mutagenesis model using your own features -> please supply BED file below
+#"AddCustomFeatures": retrain the mutagenesis model using our features + your own features -> please supply BED file below
+
+mutagenesis_method: ["predefinedFeatures"] #default = "pretrainedModel"
+customFeatures: ["Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed", "Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed"] 
+
+####
+#define the target annotation
+####
+annotation: ["genes"] # choices: "genes", "10kb", "20kb"...(any number of kbs possible), "custom" (if custom: please supply BED file below)
+CustomAnnotation: "Input/testAnnot.BED"  #if "custom" annotation is used, please supply path to BED file (columns: "chr" (content: chr1, chr2...chrX,chrY) "start" (number), "end"(number), name (optional))
+
+####
+# additional options
+####
+
+# multiple testing method
+multest_correction: ["bonferroni"] #recommended choice: "bonferroni"; other choices: "BH", "BY", "none"
+
+#should promoters be added to the target annotations?
+promoters: 0 #Default: 0; please enter a number
