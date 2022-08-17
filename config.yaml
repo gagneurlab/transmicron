@@ -10,14 +10,14 @@
 #prove insertion site data
 ####
 #name of your dataset / output folder (no spaces); you can provide multiple names separated by ","
-datasets: ["DLBCLPB", "DLBCLSB", "Intestinal", "cuSCC", "Liver", "AML"]
-insertionFile: ["Input/BEDInsertionTesting/DLBCLPB.BED","Input/BEDInsertionTesting/DLBCLSB.BED","Input/BEDInsertionTesting/Intestinal.BED","Input/BEDInsertionTesting/cuSCC.BED","Input/BEDInsertionTesting/Liver.BED", "Input/BEDInsertionTesting/AML.BED"] # insert file path here; you can provide multiple names separated by "," CAUTION: Please order "datasets" and "insertionFile" to match each other.
+datasets: ["DLBCLPB"] #, "DLBCLSB", "Intestinal", "cuSCC", "Liver", "AML"] # select only test Insertion file
+insertionFile: ["Input/TestInsertionBed/DLBCLPB.BED"] #,"Input/BEDInsertionTesting/DLBCLSB.BED","Input/BEDInsertionTesting/Intestinal.BED","Input/BEDInsertionTesting/cuSCC.BED","Input/BEDInsertionTesting/Liver.BED", "Input/BEDInsertionTesting/AML.BED"] # insert file path here; you can provide multiple names separated by "," CAUTION: Please order "datasets" and "insertionFile" to match each other.
 
 ####
 #define transposon system
 ####
 
-transposonSystem: ["PB", "SB", "SB", "SB","SB","PB"] #("PB" or "SB") Please provide the transposon system for each dataset separated by ","
+transposonSystem: ["PB", ] #"SB", "SB", "SB","SB","PB"] #("PB" or "SB") Please provide the transposon system for each dataset separated by ","
 ###################################
 #OPTIONAL PART OF THE CONFIG FILE
 ###################################
