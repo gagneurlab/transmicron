@@ -40,7 +40,7 @@ snakemake --cores 8
 ```
 
 
-lkhjdslkjflk
+
 
 It is possible to also invoke single workflows explicitly e.g. for prepareAnnoation with:
 ```
