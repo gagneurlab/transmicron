@@ -1,5 +1,5 @@
 ## TransMiCron: Accurate prediction of insertion probabilities improves detection of cancer driver genes from transposon mutagenesis screens
-test transposon
+
 
 
 ![Overview of the Transmicron method](transmicron_method.png)
@@ -36,11 +36,11 @@ Set the following configurations.
 After setting the proper configurations and activating previously created conda environment, start running the code by the following commands:
 ```
 snakemake -n #dry run
-snakemake --cores 128
+snakemake --cores 8
 ```
 
 
-lkhjdslkjflk
+
 
 It is possible to also invoke single workflows explicitly e.g. for prepareAnnoation with:
 ```
