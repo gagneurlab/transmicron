@@ -17,7 +17,7 @@ def get_args() -> Namespace:
     parser.add_argument("--CustomAnnotation", default='Input/testAnnot.BED', type=str,)
     parser.add_argument("--multest_correction", default='bonferroni', type=str,)
     parser.add_argument("--promoters", default=0, type=int, )
-    parser.add_argument("--snakemake_rule", default="", type=str)
+    parser.add_argument("--snakemake_rule", default="-n", type=str)
     parser.add_argument("--customFeatures", default="Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed,Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed", type=str) 
     parser.add_argument("--output_dir", default="./Output", type=str,)
     return parser.parse_args()
@@ -39,5 +39,5 @@ with open('./user_config.yaml', 'w') as file:
     documents = yaml.dump(args, file, default_flow_style=False)
 
 
-os.system("./run_slurm.sh" + " " + args['snakemake_rule'])
-#os.system("snakemake " + args['snakemake_rule'] + " --cores 8")
+#os.system("./run_slurm.sh" + " " + args['snakemake_rule'])
+os.system("snakemake " + args['snakemake_rule'])
