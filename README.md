@@ -39,17 +39,17 @@ python run.py --snakemake_rule="--cores 8"
 You can add several options to these commands, depending on how you want to run Transmicron. All the options are listed below: 
 ```
 python run.py 
-				--datasets="DLBCLPB" # comma seperated name of datasets
-				--insertionFile="Input/TestInsertionBed/DLBCLPB.BED" # path to comma seperated name of Bed insertion files
-				--transposonSystem="PB" # transposon systems of given datasets
-				--mutagenesis_method="predefinedFeatures"
-				--customFeatures="Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed,Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed"
-				--annotation="genes"
-				-CustomAnnotation="Input/testAnnot.BED"
-				--multest_correction="bonferroni"
-				--promoters=0
-				--snakemake_rule=""
-				--output_dir="Output"
+		--datasets="DLBCLPB" # comma seperated name of datasets
+		--insertionFile="Input/TestInsertionBed/DLBCLPB.BED" # path to comma seperated name of Bed insertion files
+		--transposonSystem="PB" # transposon systems of given datasets
+		--mutagenesis_method="predefinedFeatures"
+		--customFeatures="Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed,Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed"
+		--annotation="genes"
+		-CustomAnnotation="Input/testAnnot.BED"
+		--multest_correction="bonferroni"
+		--promoters=0
+		--snakemake_rule=""
+		--output_dir="Output"
 				
 ```
 If you want to use default parameters and data, you do not need to specify any additional parameters:
