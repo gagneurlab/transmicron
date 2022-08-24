@@ -36,7 +36,7 @@ python run.py --snakemake_rule="-n" #dry run
 python run.py --snakemake_rule="--cores 8"
 ```
 
-You can add several options to these commands, depending on how you want to run Transmicron. All the options are listed below: 
+You can add several parameters to these commands, depending on how you want to run Transmicron. All the parameters are listed below: 
 ```
 python run.py 
 		--datasets="DLBCLPB" # comma seperated name of datasets
