@@ -1,7 +1,4 @@
-#report: "report/cis_calling.rst"
-#workdir: "/s/project/transposon/Output/PublishedPipeline/"
-#workspace: "/data/nasif12/home_if12/bredthau/workspace/transposon/PublishedPipeline/"
-configfile: "./config.yaml"
+configfile: "./user_config.yaml"
 
 
 #####################################################################################
