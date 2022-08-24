@@ -1,5 +1,5 @@
 ###################################
-#config file
+# sample config file, you don't need to change anything here as it is not used when executing the pipeline and is provided just as an illustration of how a config file will look like when running python run.py with given parameters, a file similar to this one named user_config.yaml will be created and fed into the snakemake pipeline.
 ###################################
 
 ###################################
