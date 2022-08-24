@@ -9,7 +9,7 @@ Transmicron is an easy to run pipeline to identify common insertion sites (CIS) 
 
 ### Installation & Dependencies
 1. Make sure anaconda is installed on your system (https://docs.anaconda.com/anaconda/install/).
-2. @ata: please help, something like: Clone the repository / Download the folder, open a terminal and navigate to the Transmicron folder.
+2. Clone or download the repository, then open a terminal and navigate to the Transmicron folder.
 3. Create and activate the [Conda environment](environment.yml) using the following comands:
 
 ```
