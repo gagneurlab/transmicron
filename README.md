@@ -32,8 +32,8 @@ Column headers for columns 4 and 5 should be "orientation" and "TumorID" (other 
 ### Executing the code
 5. Run the whole Transmicron pipeline using [Snakemake](https://snakemake.readthedocs.io/en/stable/)  by the following commands:
 ```
-python run.py --snakemake_rule="-n" #dry run
-python run.py --snakemake_rule="--cores 8"
+python run.py --snakemakeRule="-n" #dry run
+python run.py --snakemakeRule="--cores 8"
 ```
 
 You can add several parameters to these commands, depending on how you want to run Transmicron. All the parameters are listed below: 
@@ -42,33 +42,33 @@ python run.py
 		--datasets="DLBCLPB" # comma seperated name of your insertion datasets (you can freely choose the names)
 		--insertionFile="Input/TestInsertionBed/DLBCLPB.BED" # path to comma seperated name of Bed insertion files
 		--transposonSystem="PB" # transposon systems of given datasets
-		--mutagenesis_method="predefinedFeatures"
+		--mutagenesisMethod="predefinedFeatures"
 		--customFeatures="Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed,Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed"
 		--annotation="genes"
 		-CustomAnnotation="Input/testAnnot.BED"
-		--multest_correction="bonferroni"
+		--multestMorrection="bonferroni"
 		--promoters=0
-		--snakemake_rule=""
-		--output_dir="Output"
+		--snakemakeRule=""
+		--outputDir="Output"
 				
 ```
 If you want to use default parameters and data, you do not need to specify any additional parameters:
 * insertionFile: Please supply the filepath to the BED file containing the locations of your insertions. Do not specify if you want to run Transmicron on the testing dataset.
 * transposonSystem: Options: 1. PB [the default, PiggyBac] 2. SB [Sleeping Beauty]
-* mutagenesis_method: Which version of the mutagenesis model do you want to apply? Options:
+* mutagenesisMethod: Which version of the mutagenesis model do you want to apply? Options:
   * 1. "pretrained": the default; a pretrained version of the mutagenesis model on mESC insertions is used.
   * 2. "retrain": the mutagenesis model is retrained on your data using our predefined features.
   * 3. "null": no mutagenesis model is applied, Transmicron contols only for the distribution of TA / TTAA nucleotides.
   * 4. filepath: please supply one or more filepaths to BED files containing feature information. The mutagenesis model is retrained using the distance of insertions to these features as input.
 * annotation: Please Specify the target annotation used to identify CIS. Options: 1. "genes" [the default] 2. "10kb", "20kb"...[any binlength] 3. filepath [specify a filepath to a BED file file custom features of interest, e.g. regulatory elementes]
-* snakemake_rule: Specify snakemake rule here
-* output_dir: Path to where the results of analysis will be written to.
+* snakemakeRule: Specify snakemake rule here
+* outputDir: Path to where the results of analysis will be written to.
 
 
 It is also possible to also invoke single workflows explicitly e.g. for defineMutagenesisFeatures with:
 ```
-python run.py --snakemake_rule="-n" #dry run
-python run.py --snakemake_rule="--until defineMutagenesisFeatures --cores 8" # run with 8 cores
+python run.py --snakemakeRule="-n" #dry run
+python run.py --snakemakeRule="--until defineMutagenesisFeatures --cores 8" # run with 8 cores
 ```
 
 The code is written in R and python and tested on python 3.9 and a Linux OS but should run on any OS. 
