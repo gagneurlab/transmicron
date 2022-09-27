@@ -40,4 +40,4 @@ with open('./user_config.yaml', 'w') as file:
 
 
 #os.system("./run_slurm.sh" + " " + args['snakemake_rule'])
-os.system("snakemake " + args['snakemakeRule'])
+os.system("snakemake " + args['snakemakeRule'] + " --latency-wait 60")
