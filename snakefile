@@ -140,7 +140,7 @@ rule defineMutagenesisFeatures:
 
 rule prepareAnnoation:
     params:
-        CustomAnnotation = config["CustomAnnotation"],# if the user has supplied a custom annotation, this is fed in here; @ata: maybe you find a better way to supply user defined files as inputs?
+        CustomAnnotation = config["customAnnotation"],# if the user has supplied a custom annotation, this is fed in here; @ata: maybe you find a better way to supply user defined files as inputs?
         REFSEQgtf = "Input/Annotations/genes/mm10.refGene.gtf.gz"
     output:
         AnnotationGRanges = "Input/Annotations/{annotation}/AnnotationGRanges.RData"

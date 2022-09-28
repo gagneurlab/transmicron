@@ -40,7 +40,7 @@ customFeatures: ["Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed", "Input/Feature
 #define the target annotation
 ####
 annotation: ["genes"] # choices: "genes", "10kb", "20kb"...(any number of kbs possible), "custom" (if custom: please supply BED file below)
-CustomAnnotation: "Input/testAnnot.BED"  #if "custom" annotation is used, please supply path to BED file (columns: "chr" (content: chr1, chr2...chrX,chrY) "start" (number), "end"(number), name (optional))
+customAnnotation: "Input/testAnnot.BED"  #if "custom" annotation is used, please supply path to BED file (columns: "chr" (content: chr1, chr2...chrX,chrY) "start" (number), "end"(number), name (optional))
 
 ####
 # additional options
