@@ -45,7 +45,7 @@ python run.py
 		--mutagenesisMethod="predefinedFeatures"
 		--customFeatures="Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed,Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed"
 		--annotation="genes"
-		-CustomAnnotation="Input/testAnnot.BED"
+		--CustomAnnotation="Input/testAnnot.BED"
 		--multestMorrection="bonferroni"
 		--promoters=0
 		--snakemakeRule=""
