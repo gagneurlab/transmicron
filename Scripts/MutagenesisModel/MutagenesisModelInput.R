@@ -20,7 +20,6 @@ library(regioneR)
 library(tidymodels)
 library(caret)
 library(dplyr)
-library(stringr)
 
 ########################################
 #read input
