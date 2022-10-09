@@ -27,7 +27,7 @@ def get_args() -> Namespace:
 
 
 def get_annotation(annot):
-    if annotation.endswith(".BED") is True:
+    if annot[0].endswith(".BED") is True:
         annotation = 'custom'
         customAnnotation = annot
     elif bool(re.search("\d*kb|genes", annot)) is True: # annot can only be in the format of "genes" or "10kb", "20kb", ...
