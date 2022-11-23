@@ -43,7 +43,7 @@ python run.py --snakemakeRule="--cores 8"
 You can add several parameters to these commands, depending on how you want to run Transmicron. All the parameters are listed below, with their default value. The program sets the default value to any parameter that is not defined by the user.
 ```
 python run.py 
-		--datasets="DLBCLPB" # comma seperated name of your insertion datasets (you can freely choose the names, the final results will be saved to outputDir/datset for each dataset define here)
+		--datasets="DLBCLPB" # comma seperated name of your insertion datasets (you can freely choose the names, the final results will be saved to [outputDir/datset] for each dataset defined here)
 		--insertionFile="Input/TestInsertionBed/DLBCLPB.BED" # path to comma seperated name of Bed insertion files
 		--transposonSystem="PB" # transposon systems of given datasets
 		--mutagenesisMethod="predefinedFeatures"
@@ -55,7 +55,7 @@ python run.py
 		--outputDir="Output"
 				
 ```
-All paths are relative to root of the program (i.e. where snakefile is). If you want to use default parameters and data, you do not need to specify any additional parameters:
+All paths are relative to the root of the program (i.e. where the snakefile is). If you want to use default parameters and data, you do not need to specify any additional parameters:
 * insertionFile: Please supply the filepath to the BED file containing the locations of your insertions. Do not specify if you want to run Transmicron on the testing dataset.
 * transposonSystem: Options: 1. PB [PiggyBac, default] 2. SB [Sleeping Beauty]
 * mutagenesisMethod: Which version of the mutagenesis model do you want to apply? Options:
@@ -97,4 +97,4 @@ Gene annotation:
 All files are provided in Input folder.
 
 ## Acknowledgements and Funding
-This work was supported by tThe German Bundesministerium für Bildung und Forschung (BMBF) supported the study through the VALE (Entdeckung und Vorhersage der Wirkung von genetischen Varianten durch Artifizielle Intelligenz für LEukämie Diagnose und Subtyp-Identifizierung) project (031L0203B to CB, XQ and JG)
+This work was supported by the German Bundesministerium für Bildung und Forschung (BMBF) supported the study through the VALE (Entdeckung und Vorhersage der Wirkung von genetischen Varianten durch Artifizielle Intelligenz für LEukämie Diagnose und Subtyp-Identifizierung) project (031L0203B to CB, XQ and JG)
