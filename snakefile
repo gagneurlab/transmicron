@@ -223,7 +223,7 @@ rule MutagenesisModelInput:
 
 rule trainMutagenesisModel:
     input:
-        MutagenesisTrainingData = "Output/{dataset}/{transposonSystem}/MutagenesisTrainingData_{mutaFeatures}.RData" # @ata: we could change how we transfer files between R and python from .RData files to .csv; alternatively, we coul dimplement the model in r
+        MutagenesisTrainingData = "Output/{dataset}/{transposonSystem}/MutagenesisTrainingData_{mutaFeatures}.RData" # @ata: we could change how we transfer files between R and python from .RData files to .csv; alternatively, we could dimplement the model in r
     output:
         MutagenesisModel = "Output/{dataset}/{transposonSystem}/MutagenesisModel_{mutaFeatures}.pickle"
     resources:
@@ -293,7 +293,7 @@ rule NULL_model_predictionsPRECOMPUTED:
 
 ruleorder: NULL_model_predictionsPRECOMPUTED > predictInsertionRatesPRECOMPUTED > NULL_model_predictions > predictInsertionRates
 
-
+# for debugging
 #rule precompAnnotations:
  #   output:
   #      AnnotationEqualWeight = "Input/{transposonSystem}/{annotation}/AnnotationMatrix_EqualWeightInsRates_precompFeatures.RData",
