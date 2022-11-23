@@ -10,6 +10,10 @@ Transmicron is an easy to run pipeline to identify common insertion sites (CIS) 
 ### Installation & Dependencies
 1. Make sure anaconda is installed on your system (https://docs.anaconda.com/anaconda/install/).
 2. Clone or download the repository, then open a terminal and navigate to the Transmicron folder.
+```
+git clone https://github.com/gagneurlab/transmicron.git
+cd transmicron
+```
 3. Create and activate the [Conda environment](environment.yml) using the following comands:
 
 ```
@@ -20,12 +24,12 @@ conda activate transmicron
 ### Prepare insertion data
 YOU CAN SKIP THIS STEP IF YOU RUN TRANSMICRON ON THE TEST DATA PROVIDED BY US.
 
-4. Please prepare a BED file specifying the genomic locations of your transposon insertions. 5 columns are mandatory:
+4. Please prepare a [BED](https://www.genomatix.de/online_help/help_regionminer/bedformat_help.html) file specifying the genomic locations of your transposon insertions. 5 columns are mandatory:
 * Column 1 specifies the chromosome (Format: chr1, chr2...chrX, chrY).
-* Column 2 specifies the START of the insertion sites (a number).
-* Column 3 specifies the END of the insertion sites (a number). PLEASE ENSURE THAT START AND END ARE CONSECUTIVE NUCLEOTIDES (e.g. Start: 1234, End: 1235).
+* Column 2 specifies the position [START] of the insertion site (a number).
+* Column 3 specifies the END of the insertion site (a number). Alywas: END = START + 1  (e.g. START: 1234, END: 1235).
 * Column 4 specifies the orientation of transposon insertions ("-" or "+").
-* Column 5 supplies sample / Tumour identifiers.
+* Column 5 supplies Sample / Tumour identifiers.
 
 Column headers for columns 4 and 5 should be "orientation" and "TumorID" (other column names do not matter). Additional columns will be disregarded. An example can be found under Input/TestInsertionBed/. 
 
@@ -36,10 +40,10 @@ python run.py --snakemakeRule="-n" #dry run
 python run.py --snakemakeRule="--cores 8"
 ```
 
-You can add several parameters to these commands, depending on how you want to run Transmicron. All the parameters are listed below: 
+You can add several parameters to these commands, depending on how you want to run Transmicron. All the parameters are listed below, with their default value. The program sets the default value to any parameter that is not defined by the user.
 ```
 python run.py 
-		--datasets="DLBCLPB" # comma seperated name of your insertion datasets (you can freely choose the names)
+		--datasets="DLBCLPB" # comma seperated name of your insertion datasets (you can freely choose the names, the final results will be saved to outputDir/datset for each dataset define here)
 		--insertionFile="Input/TestInsertionBed/DLBCLPB.BED" # path to comma seperated name of Bed insertion files
 		--transposonSystem="PB" # transposon systems of given datasets
 		--mutagenesisMethod="predefinedFeatures"
@@ -51,17 +55,17 @@ python run.py
 		--outputDir="Output"
 				
 ```
-If you want to use default parameters and data, you do not need to specify any additional parameters:
+All paths are relative to root of the program (i.e. where snakefile is). If you want to use default parameters and data, you do not need to specify any additional parameters:
 * insertionFile: Please supply the filepath to the BED file containing the locations of your insertions. Do not specify if you want to run Transmicron on the testing dataset.
-* transposonSystem: Options: 1. PB [the default, PiggyBac] 2. SB [Sleeping Beauty]
+* transposonSystem: Options: 1. PB [PiggyBac, default] 2. SB [Sleeping Beauty]
 * mutagenesisMethod: Which version of the mutagenesis model do you want to apply? Options:
-  * 1. "pretrained": the default; a pretrained version of the mutagenesis model on mESC insertions is used.
+  * 1. "pretrained": default option; a pretrained version of the mutagenesis model on mESC insertions is used.
   * 2. "retrain": the mutagenesis model is retrained on your data using our predefined features.
   * 3. "null": no mutagenesis model is applied, Transmicron contols only for the distribution of TA / TTAA nucleotides.
   * 4. filepath: please supply one or more filepaths to BED files containing feature information. The mutagenesis model is retrained using the distance of insertions to these features as input.
-* annotation: Please Specify the target annotation used to identify CIS. Options: 1. "genes" [the default] 2. "10kb", "20kb"...[any binlength] 3. filepath [specify a filepath to a BED file file custom features of interest, e.g. regulatory elementes]
+* annotation: Please Specify the target annotation used to identify CIS. Options: 1. "genes" [default] 2. "10kb", "20kb"...[any binlength] 3. filepath [specify a filepath to a BED file file custom features of interest, e.g. regulatory elementes]
 * snakemakeRule: Specify snakemake rule here
-* outputDir: Path to where the results of analysis will be written to.
+* outputDir: Path to where the results of analysis will be written to. 
 
 
 It is also possible to also invoke single workflows explicitly e.g. for defineMutagenesisFeatures with:
@@ -73,9 +77,10 @@ python run.py --snakemakeRule="--until defineMutagenesisFeatures --cores 8" # ru
 The code is written in R and python and tested on python 3.9 and a Linux OS but should run on any OS. 
 
 
-
+[comment]: <> (
 ## Required Ressources
 The ressources required strongly depend on which parameters you choose above. On the test data, using default parameters, roghly XX mb of memory are reuiqred. The pipeline takes roughly xx minutes to run. 
+)
 
 ## Features and Annotations
 By default the following datasets are used:
@@ -92,4 +97,4 @@ Gene annotation:
 All files are provided in Input folder.
 
 ## Acknowledgements and Funding
-
+This work was supported by tThe German Bundesministerium für Bildung und Forschung (BMBF) supported the study through the VALE (Entdeckung und Vorhersage der Wirkung von genetischen Varianten durch Artifizielle Intelligenz für LEukämie Diagnose und Subtyp-Identifizierung) project (031L0203B to CB, XQ and JG)
