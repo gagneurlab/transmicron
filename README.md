@@ -43,14 +43,14 @@ python run.py --snakemakeRule="--cores 8"
 You can add several parameters to these commands, depending on how you want to run Transmicron. All the parameters are listed below, with their default value. The program sets the default value to any parameter that is not defined by the user.
 ```
 python run.py   
-		--insertionFile="Input/TestInsertionBed/DLBCLPB.BED" \ # path to comma seperated name of BED insertion files, the final results will be saved to [outputDir/datset] for each dataset provided here, e.g. Output/DLBCLPB
-		--transposonSystem="PB" \ # transposon systems of given datasets, the same order as insertion BED files
-		--mutagenesisMethod="predefinedFeatures" \
-		--customFeatures="Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed,Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed" \
-		--annotation="genes" \
-		--multestCorrection="bonferroni" \
-		--snakemakeRule="" \
-		--outputDir="Output" \
+		--insertionFile="Input/TestInsertionBed/DLBCLPB.BED"  # path to comma seperated name of BED insertion files, the final results will be saved to [outputDir/datset] for each dataset provided here, e.g. Output/DLBCLPB
+		--transposonSystem="PB"  # transposon systems of given datasets, the same order as insertion BED files
+		--mutagenesisMethod="predefinedFeatures" 
+		--customFeatures="Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed,Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed" 
+		--annotation="genes" 
+		--multestCorrection="bonferroni" 
+		--snakemakeRule="--cores 8" 
+		--outputDir="Output" 
 				
 ```
 All paths can be given relative to the root of the program (i.e. where the snakefile is) or as absolute paths. If you want to use default parameters and data, you do not need to specify any additional parameters:
@@ -74,6 +74,11 @@ python run.py --snakemakeRule="--until defineMutagenesisFeatures --cores 8" # ru
 
 The code is written in R and python and tested on python 3.9 and a Linux OS but should run on any OS. 
 
+
+[comment]: <> (
+## Required Ressources
+The ressources required strongly depend on which parameters you choose above. On the test data, using default parameters, roghly XX mb of memory are reuiqred. The pipeline takes roughly xx minutes to run. 
+)
 
 ## Features and Annotations
 By default the following datasets are used:

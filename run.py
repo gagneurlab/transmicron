@@ -17,9 +17,9 @@ def get_args() -> Namespace:
     parser.add_argument("--annotation", default='genes', type=str,)
     parser.add_argument("--customAnnotation", default='Input/testAnnot.BED', type=str,)
     parser.add_argument("--multestCorrection", default='bonferroni', type=str,)
-    parser.add_argument("--snakemakeRule", type=str)
+    parser.add_argument("--snakemakeRule", default="--cores 8", type=str)
     parser.add_argument("--customFeatures", default="Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed,Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed", type=str) 
-    parser.add_argument("--outputDir", default="./Output", type=str,)
+    parser.add_argument("--outputDir", default="Output", type=str,)
     return parser.parse_args()
 
 
