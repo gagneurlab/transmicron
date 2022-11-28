@@ -75,11 +75,6 @@ python run.py --snakemakeRule="--until defineMutagenesisFeatures --cores 8" # ru
 The code is written in R and python and tested on python 3.9 and a Linux OS but should run on any OS. 
 
 
-[comment]: <> (
-## Required Ressources
-The ressources required strongly depend on which parameters you choose above. On the test data, using default parameters, roghly XX mb of memory are reuiqred. The pipeline takes roughly xx minutes to run. 
-)
-
 ## Features and Annotations
 By default the following datasets are used:
 
