@@ -17,7 +17,6 @@ def get_args() -> Namespace:
     parser.add_argument("--annotation", default='genes', type=str,)
     parser.add_argument("--customAnnotation", default='Input/testAnnot.BED', type=str,)
     parser.add_argument("--multestCorrection", default='bonferroni', type=str,)
-    #parser.add_argument("--promoters", default=0, type=int, )  ## not implemented yet
     parser.add_argument("--snakemakeRule", type=str)
     parser.add_argument("--customFeatures", default="Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed,Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed", type=str) 
     parser.add_argument("--outputDir", default="./Output", type=str,)
@@ -49,7 +48,7 @@ args['multest_correction'] = args['multestCorrection'].split(',')
 args['mutagenesis_method'] = args['mutagenesisMethod'].split(',')
 args['annotation'], args['customAnnotation'] = get_annotation(args['annotation'].split(','))
 args['customFeatures'] = args['customFeatures'].split(',')
-
+args['outputDir'] = args['outputDir']
 
 with open('./user_config.yaml', 'w') as file:
     documents = yaml.dump(args, file, default_flow_style=False)

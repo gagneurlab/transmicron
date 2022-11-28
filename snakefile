@@ -1,9 +1,7 @@
+import pathlib
+from pathlib import Path
 configfile: "./user_config.yaml"
 
-
-#####################################################################################
-# memory management @ata: please feel free to optimize ressource management in whatever way works best
-#####################################################################################
 
 #dictionary to map dataset name to insertion BED-file
 insertionFilesZIP = zip(config["datasets"], config["insertionFile"])
@@ -12,6 +10,7 @@ insertionFilesDict = dict(insertionFilesZIP)
 insertionFilesDict["unselectedPB"] = "Input/BEDInsertionTesting/PBmESC.BED"
 insertionFilesDict["unselectedSB"] = "Input/BEDInsertionTesting/SBmESC.BED"
 
+output_dir = Path(config['outputDir'])
 
 #ressources needed to build the feature matrices for all TTAA / TA sites in the genome
 model_resources = {
@@ -79,20 +78,19 @@ input_target_rule=list()
 for i in range(0, len(config["datasets"])):
     
     if("pretrainedModel" in config["mutagenesis_method"]):
-        input_target_rule.append(expand("Output/{dataset}/{transposonSystem}/results/results_{annotation}_{insertionRates}_{mutaFeatures}.csv", dataset=config["datasets"][i], annotation=config["annotation"], transposonSystem=config["transposonSystem"][i], insertionRates = "precompInsRates",mutaFeatures = "precompFeatures" ))
+        input_target_rule.append(expand("{outputDir}/{dataset}/{transposonSystem}/results/results_{annotation}_{insertionRates}_{mutaFeatures}.csv", outputDir = config['outputDir'], dataset=config["datasets"][i], annotation=config["annotation"], transposonSystem=config["transposonSystem"][i], insertionRates = "precompInsRates",mutaFeatures = "precompFeatures" ))
 
     if("predefinedFeatures" in config["mutagenesis_method"]):
-        input_target_rule.append(expand("Output/{dataset}/{transposonSystem}/results/results_{annotation}_{insertionRates}_{mutaFeatures}.csv", dataset=config["datasets"][i], annotation=config["annotation"], transposonSystem=config["transposonSystem"][i], insertionRates = "NewInsRates",mutaFeatures = "precompFeatures" ))
+        input_target_rule.append(expand("{outputDir}/{dataset}/{transposonSystem}/results/results_{annotation}_{insertionRates}_{mutaFeatures}.csv", outputDir = config['outputDir'], dataset=config["datasets"][i], annotation=config["annotation"], transposonSystem=config["transposonSystem"][i], insertionRates = "NewInsRates",mutaFeatures = "precompFeatures" ))
 
     if("noMutagenesis" in config["mutagenesis_method"]):
-        input_target_rule.append(expand("Output/{dataset}/{transposonSystem}/results/results_{annotation}_{insertionRates}_{mutaFeatures}.csv", dataset=config["datasets"][i], annotation=config["annotation"], transposonSystem=config["transposonSystem"][i], insertionRates = "EqualWeightInsRates",mutaFeatures = "precompFeatures"))
+        input_target_rule.append(expand("{outputDir}/{dataset}/{transposonSystem}/results/results_{annotation}_{insertionRates}_{mutaFeatures}.csv", outputDir = config['outputDir'], dataset=config["datasets"][i], annotation=config["annotation"], transposonSystem=config["transposonSystem"][i], insertionRates = "EqualWeightInsRates",mutaFeatures = "precompFeatures"))
 
     if("OnlyCustomFeatures" in config["mutagenesis_method"]):
-        input_target_rule.append(expand("Output/{dataset}/{transposonSystem}/results/results_{annotation}_{insertionRates}_{mutaFeatures}.csv", dataset=config["datasets"][i], annotation=config["annotation"], transposonSystem=config["transposonSystem"][i], insertionRates = "NewInsRates",mutaFeatures = "OnlyCustomFeatures"))
+        input_target_rule.append(expand("{outputDir}/{dataset}/{transposonSystem}/results/results_{annotation}_{insertionRates}_{mutaFeatures}.csv", outputDir = config['outputDir'], dataset=config["datasets"][i], annotation=config["annotation"], transposonSystem=config["transposonSystem"][i], insertionRates = "NewInsRates",mutaFeatures = "OnlyCustomFeatures"))
 
     if("AddCustomFeatures" in config["mutagenesis_method"]):
-        input_target_rule.append(expand("Output/{dataset}/{transposonSystem}/results/results_{annotation}_{insertionRates}_{mutaFeatures}.csv", dataset=config["datasets"][i], annotation=config["annotation"], transposonSystem=config["transposonSystem"][i], insertionRates = "NewInsRates",mutaFeatures = "AddCustomFeatures"))
-
+        input_target_rule.append(expand("{outputDir}/{dataset}/{transposonSystem}/results/results_{annotation}_{insertionRates}_{mutaFeatures}.csv", outputDir = config['outputDir'], dataset=config["datasets"][i], annotation=config["annotation"], transposonSystem=config["transposonSystem"][i], insertionRates = "NewInsRates",mutaFeatures = "AddCustomFeatures"))
 rule target:
     input: 
         input_target_rule
@@ -101,7 +99,7 @@ rule target:
 ##########################################################################
 #Step 0: Preprocess user input
 ##########################################################################
-    
+
 # 0.1.: preprocess insertion data (BED-file)
 
 
@@ -110,7 +108,7 @@ rule processInsertionFile:
     params:
         insertionFile = lambda wildcards: insertionFilesDict[wildcards.dataset]
     output:
-        Granges_insertions = "Output/{dataset}/{transposonSystem}/Granges_insertions.RData"
+        Granges_insertions = output_dir / "{dataset}/{transposonSystem}/Granges_insertions.RData"
     script:
         "Scripts/processInsertionBED.R"
         
@@ -185,11 +183,11 @@ rule GenomeTargetSitesNew:
     resources:
         mem_mb = lambda wildcards: model_resources[wildcards.transposonSystem]['mem_mb']
     output:
-        one_hot_encoder = "Output/{dataset}/{transposonSystem}/InputFeaturesMutagenesis/one_hot_encoder_{mutaFeatures}.RData",
-        granges_negatives_controls = "Output/{dataset}/{transposonSystem}/InputFeaturesMutagenesis/granges_negatives_controls_{mutaFeatures}.RData",
-        step1_input_negatives_controls = "Output/{dataset}/{transposonSystem}/InputFeaturesMutagenesis/step1_input_negatives_controls_{mutaFeatures}.RData",
-        one_bp_ranges_negatives ="Output/{dataset}/{transposonSystem}/InputFeaturesMutagenesis/one_bp_ranges_negatives_{mutaFeatures}.RData",
-        step1_input_negatives_whole_genome = "Output/{dataset}/{transposonSystem}/InputFeaturesMutagenesis/step1_input_negatives_whole_genome_{mutaFeatures}.h5"
+        one_hot_encoder = output_dir / "{dataset}/{transposonSystem}/InputFeaturesMutagenesis/one_hot_encoder_{mutaFeatures}.RData",
+        granges_negatives_controls = output_dir / "{dataset}/{transposonSystem}/InputFeaturesMutagenesis/granges_negatives_controls_{mutaFeatures}.RData",
+        step1_input_negatives_controls = output_dir / "{dataset}/{transposonSystem}/InputFeaturesMutagenesis/step1_input_negatives_controls_{mutaFeatures}.RData",
+        one_bp_ranges_negatives = output_dir / "{dataset}/{transposonSystem}/InputFeaturesMutagenesis/one_bp_ranges_negatives_{mutaFeatures}.RData",
+        step1_input_negatives_whole_genome = output_dir / "{dataset}/{transposonSystem}/InputFeaturesMutagenesis/step1_input_negatives_whole_genome_{mutaFeatures}.h5"
     script:
         "Scripts/MutagenesisModel/GenomeTargetSites.R"
         
@@ -200,7 +198,7 @@ ruleorder: GenomeTargetSitesPrecomp > GenomeTargetSitesNew
 rule MutagenesisModelInput:
     input:
         featureList ="Input/{transposonSystem}/InputFeaturesMutagenesis/featureList_{mutaFeatures}.RData",
-        Granges_insertions = "Output/{dataset}/{transposonSystem}/Granges_insertions.RData",
+        Granges_insertions = output_dir / "{dataset}/{transposonSystem}/Granges_insertions.RData",
         one_hot_encoder = lambda wildcards: "/".join([pathNegatives[wildcards.mutaFeatures],"{transposonSystem}/InputFeaturesMutagenesis/one_hot_encoder_{mutaFeatures}.RData"]),
          granges_negatives_controls = lambda wildcards: "/".join([pathNegatives[wildcards.mutaFeatures],"{transposonSystem}/InputFeaturesMutagenesis/granges_negatives_controls_{mutaFeatures}.RData"]),
          step1_input_negatives_controls = lambda wildcards: "/".join([pathNegatives[wildcards.mutaFeatures], "{transposonSystem}/InputFeaturesMutagenesis/step1_input_negatives_controls_{mutaFeatures}.RData"])
@@ -211,10 +209,10 @@ rule MutagenesisModelInput:
     resources:
         mem_mb=160000
     output:
-        step1_input_positives_RAW ="Output/{dataset}/{transposonSystem}/step1_input_positives_RAW_{mutaFeatures}.RData",
-        step1_input_positives = "Output/{dataset}/{transposonSystem}/step1_input_positives_{mutaFeatures}.RData",
-        MutagenesisTrainingData = "Output/{dataset}/{transposonSystem}/MutagenesisTrainingData_{mutaFeatures}.RData",
-        MutagenesisTestData = "Output/{dataset}/{transposonSystem}/MutagenesisTestData_{mutaFeatures}.RData"
+        step1_input_positives_RAW =output_dir / "{dataset}/{transposonSystem}/step1_input_positives_RAW_{mutaFeatures}.RData",
+        step1_input_positives = output_dir / "{dataset}/{transposonSystem}/step1_input_positives_{mutaFeatures}.RData",
+        MutagenesisTrainingData = output_dir / "{dataset}/{transposonSystem}/MutagenesisTrainingData_{mutaFeatures}.RData",
+        MutagenesisTestData = output_dir / "{dataset}/{transposonSystem}/MutagenesisTestData_{mutaFeatures}.RData"
     script:
         "Scripts/MutagenesisModel/MutagenesisModelInput.R"
         
@@ -223,9 +221,9 @@ rule MutagenesisModelInput:
 
 rule trainMutagenesisModel:
     input:
-        MutagenesisTrainingData = "Output/{dataset}/{transposonSystem}/MutagenesisTrainingData_{mutaFeatures}.RData" # @ata: we could change how we transfer files between R and python from .RData files to .csv; alternatively, we could dimplement the model in r
+        MutagenesisTrainingData = output_dir / "{dataset}/{transposonSystem}/MutagenesisTrainingData_{mutaFeatures}.RData" # @ata: we could change how we transfer files between R and python from .RData files to .csv; alternatively, we could dimplement the model in r
     output:
-        MutagenesisModel = "Output/{dataset}/{transposonSystem}/MutagenesisModel_{mutaFeatures}.pickle"
+        MutagenesisModel = output_dir / "{dataset}/{transposonSystem}/MutagenesisModel_{mutaFeatures}.pickle"
     resources:
         mem_mb=60000
     script:
@@ -235,13 +233,13 @@ rule trainMutagenesisModel:
 
 rule predictInsertionRates:
     input:
-        predict_insertion_model = "Output/{dataset}/{transposonSystem}/MutagenesisModel_{mutaFeatures}.pickle",
+        predict_insertion_model = output_dir / "{dataset}/{transposonSystem}/MutagenesisModel_{mutaFeatures}.pickle",
         step1_input_negatives_whole_genome = lambda wildcards: "/".join([pathNegatives[wildcards.mutaFeatures], "{transposonSystem}/InputFeaturesMutagenesis/step1_input_negatives_whole_genome_{mutaFeatures}.h5"]),
-        step1_input_positives = "Output/{dataset}/{transposonSystem}/step1_input_positives_{mutaFeatures}.RData"
+        step1_input_positives = output_dir / "{dataset}/{transposonSystem}/step1_input_positives_{mutaFeatures}.RData"
     resources:
         mem_mb=100000
     output:               
-        InsertionRatesGenome = "Output/{dataset}/{transposonSystem}/InsertionRates/Genomewide_{insertionRates}_{mutaFeatures}.csv"
+        InsertionRatesGenome = output_dir / "{dataset}/{transposonSystem}/InsertionRates/Genomewide_{insertionRates}_{mutaFeatures}.csv"
     script:
         "Scripts/MutagenesisModel/predictInsertionRatesGenome.py"
 
@@ -256,7 +254,7 @@ rule NULL_model_predictions:
     resources:
         mem_mb=100000
     output:               
-        InsertionRatesGenome = "Output/{dataset}/{transposonSystem}/InsertionRates/Genomewide_EqualWeightInsRates_{mutaFeatures}.csv"
+        InsertionRatesGenome = output_dir / "{dataset}/{transposonSystem}/InsertionRates/Genomewide_EqualWeightInsRates_{mutaFeatures}.csv"
     script:
         "Scripts/MutagenesisModel/NoMutagenesisInsertionRates.py"
      
@@ -330,11 +328,11 @@ rule matrixInsRatesPrecomp:
         
 rule matrixInsRatesNew:
     input:
-        InsertionRatesGenome = "Output/{dataset}/{transposonSystem}/InsertionRates/Genomewide_{insertionRates}_{mutaFeatures}.csv",
+        InsertionRatesGenome = output_dir / "{dataset}/{transposonSystem}/InsertionRates/Genomewide_{insertionRates}_{mutaFeatures}.csv",
         one_bp_ranges_negatives = lambda wildcards: "/".join([pathNegatives[wildcards.mutaFeatures],"{transposonSystem}/InputFeaturesMutagenesis/one_bp_ranges_negatives_{mutaFeatures}.RData"]),
         AnnotationGRanges = "Input/Annotations/{annotation}/AnnotationGRanges.RData"
     output:
-        AnnotationMatrix= "Output/{dataset}/{transposonSystem}/{annotation}/AnnotationMatrix_{insertionRates}_{mutaFeatures}.RData"
+        AnnotationMatrix= output_dir / "{dataset}/{transposonSystem}/{annotation}/AnnotationMatrix_{insertionRates}_{mutaFeatures}.RData"
     resources:
         mem_mb=60000
     script:
@@ -345,15 +343,15 @@ ruleorder: matrixInsRatesPrecomp > matrixInsRatesNew
         
 rule createInputSelectionModel:
     input:
-        annotationMatrix = lambda wildcards: "Output/" + "/".join([pathInsertion[wildcards.insertionRates],"{transposonSystem}/{annotation}/AnnotationMatrix_{insertionRates}_{mutaFeatures}.RData"]),
+        annotationMatrix = lambda wildcards: output_dir / "/".join([pathInsertion[wildcards.insertionRates],"{transposonSystem}/{annotation}/AnnotationMatrix_{insertionRates}_{mutaFeatures}.RData"]),
         AnnotationGRanges = "Input/Annotations/{annotation}/AnnotationGRanges.RData",
-        InsertionRatesGenome =  lambda wildcards: "Output/" + "/".join([pathInsertion[wildcards.insertionRates],"{transposonSystem}/InsertionRates/Genomewide_{insertionRates}_{mutaFeatures}.csv"]),
-        Granges_insertions = "Output/{dataset}/{transposonSystem}/Granges_insertions.RData",
+        InsertionRatesGenome =  lambda wildcards: output_dir / "/".join([pathInsertion[wildcards.insertionRates],"{transposonSystem}/InsertionRates/Genomewide_{insertionRates}_{mutaFeatures}.csv"]),
+        Granges_insertions = output_dir / "{dataset}/{transposonSystem}/Granges_insertions.RData",
         one_bp_ranges_negatives = lambda wildcards: "/".join([pathNegatives[wildcards.mutaFeatures],"{transposonSystem}/InputFeaturesMutagenesis/one_bp_ranges_negatives_{mutaFeatures}.RData"])
     params:
         transposon_system = lambda wildcards: transposon_system[wildcards.dataset]['transposon_system']
     output:
-        SelectionModelInput = "Output/{dataset}/{transposonSystem}/{annotation}/SelectionModelInput_{insertionRates}_{mutaFeatures}.RData"
+        SelectionModelInput = output_dir / "{dataset}/{transposonSystem}/{annotation}/SelectionModelInput_{insertionRates}_{mutaFeatures}.RData"
     resources:
         mem_mb=30000
     script:
@@ -362,10 +360,10 @@ rule createInputSelectionModel:
 # 2.2.: Run selection model and generate output
 rule runSelectionModel:
     input:
-        SelectionModelInput50kb = "Output/{dataset}/{transposonSystem}/50kb/SelectionModelInput_{insertionRates}_{mutaFeatures}.RData", #used to fit the first glm 
-        SelectionModelInputTargetAnnotation = "Output/{dataset}/{transposonSystem}/{annotation}/SelectionModelInput_{insertionRates}_{mutaFeatures}.RData" #used to call CIS
+        SelectionModelInput50kb = output_dir / "{dataset}/{transposonSystem}/50kb/SelectionModelInput_{insertionRates}_{mutaFeatures}.RData", #used to fit the first glm 
+        SelectionModelInputTargetAnnotation = output_dir / "{dataset}/{transposonSystem}/{annotation}/SelectionModelInput_{insertionRates}_{mutaFeatures}.RData" #used to call CIS
     output:
-        results = "Output/{dataset}/{transposonSystem}/results/results_{annotation}_{insertionRates}_{mutaFeatures}.csv"
+        results = output_dir / "{dataset}/{transposonSystem}/results/results_{annotation}_{insertionRates}_{mutaFeatures}.csv"
     params:
         multest_correction = config["multest_correction"]
     resources:

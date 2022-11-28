@@ -43,18 +43,17 @@ python run.py --snakemakeRule="--cores 8"
 You can add several parameters to these commands, depending on how you want to run Transmicron. All the parameters are listed below, with their default value. The program sets the default value to any parameter that is not defined by the user.
 ```
 python run.py   
-		--insertionFile="Input/TestInsertionBed/DLBCLPB.BED" # path to comma seperated name of BED insertion files, the final results will be saved to [outputDir/datset] for each dataset provided here, e.g. Output/DLBCLPB
-		--transposonSystem="PB" # transposon systems of given datasets, the same order as insertion BED files
-		--mutagenesisMethod="predefinedFeatures"
-		--customFeatures="Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed,Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed"
-		--annotation="genes"
-		--multestMorrection="bonferroni"
-		--promoters=0
-		--snakemakeRule=""
-		--outputDir="Output"
+		--insertionFile="Input/TestInsertionBed/DLBCLPB.BED" \ # path to comma seperated name of BED insertion files, the final results will be saved to [outputDir/datset] for each dataset provided here, e.g. Output/DLBCLPB
+		--transposonSystem="PB" \ # transposon systems of given datasets, the same order as insertion BED files
+		--mutagenesisMethod="predefinedFeatures" \
+		--customFeatures="Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed,Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed" \
+		--annotation="genes" \
+		--multestCorrection="bonferroni" \
+		--snakemakeRule="" \
+		--outputDir="Output" \
 				
 ```
-All paths are relative to the root of the program (i.e. where the snakefile is). If you want to use default parameters and data, you do not need to specify any additional parameters:
+All paths can be given relative to the root of the program (i.e. where the snakefile is) or as absolute paths. If you want to use default parameters and data, you do not need to specify any additional parameters:
 * insertionFile: Please supply the filepath to the BED file containing the locations of your insertions. Do not specify if you want to run Transmicron on the testing dataset.
 * transposonSystem: Options: 1. PB [PiggyBac, default] 2. SB [Sleeping Beauty]
 * mutagenesisMethod: Which version of the mutagenesis model do you want to apply? Options:
