@@ -23,7 +23,7 @@ conda activate transmicron
 4. (Optional, Recommended) If you want to use our precomputed features, download all Input and features from projects [zenodo](https://zenodo.org/record/7373066) using the following code. The files are about 15GB, so this might take some time.
 ```
 wget https://zenodo.org/record/7373066/files/Input.zip?download=1
-unzip -o Input.zip?download=1 && rm Input.zip?download=1.zip
+unzip -o Input.zip?download=1 && rm Input.zip?download=1
 snakemake --cores 1 --touch
 ```
 If you don't download the data from zenodo, you can still run the program with the Input folder provided in this github repository, but all features will be calculated from scratch.
