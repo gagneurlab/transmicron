@@ -7,7 +7,7 @@ Transmicron is an easy to run pipeline to identify common insertion sites (CIS) 
 
 ##Running transmicron
 
-### Installation & Dependencies
+### Installation & Input Data
 1. Make sure anaconda is installed on your system (https://docs.anaconda.com/anaconda/install/).
 2. Clone or download the repository, then open a terminal and navigate to the Transmicron folder.
 ```
@@ -20,7 +20,13 @@ cd transmicron
 conda env create --name transmicron --file=environment.yml
 conda activate transmicron
 ```
-
+4. (Optional, Recommended) If you want to use our precomputed features, download all Input and features from projects [zenodo](https://zenodo.org/record/7373066) using the following code. The files are about 15GB, so this might take some time.
+```
+wget https://zenodo.org/record/7373066/files/Input.zip?download=1
+unzip -o Input.zip?download=1 && rm Input.zip?download=1.zip
+snakemake --cores 1 --touch
+```
+If you don't download the data from zenodo, you can still run the program with the Input folder provided in this github repository, but all features will be calculated from scratch.
 ### Prepare insertion data
 YOU CAN SKIP THIS STEP IF YOU RUN TRANSMICRON ON THE TEST DATA PROVIDED BY US.
 
@@ -43,7 +49,7 @@ python run.py --snakemakeRule="--cores 8"
 You can add several parameters to these commands, depending on how you want to run Transmicron. All the parameters are listed below, with their default value. The program sets the default value to any parameter that is not defined by the user.
 ```
 python run.py   
-		--insertionFile="Input/TestInsertionBed/DLBCLPB.BED"  # path to comma seperated name of BED insertion files, the final results will be saved to [outputDir/datset] for each dataset provided here, e.g. Output/DLBCLPB
+		--insertionFile="Input/BEDInsertionTesting/DLBCLPB.BED"  # path to comma seperated name of BED insertion files, the final results will be saved to [outputDir/datset] for each dataset provided here, e.g. Output/DLBCLPB
 		--transposonSystem="PB"  # transposon systems of given datasets, the same order as insertion BED files
 		--mutagenesisMethod="predefinedFeatures" 
 		--customFeatures="Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed,Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed" 
@@ -57,8 +63,8 @@ All paths can be given relative to the root of the program (i.e. where the snake
 * insertionFile: Please supply the filepath to the BED file containing the locations of your insertions. Do not specify if you want to run Transmicron on the testing dataset.
 * transposonSystem: Options: 1. PB [PiggyBac, default] 2. SB [Sleeping Beauty]
 * mutagenesisMethod: Which version of the mutagenesis model do you want to apply? Options:
-  * 1. "pretrained": default option; a pretrained version of the mutagenesis model on mESC insertions is used.
-  * 2. "retrain": the mutagenesis model is retrained on your data using our predefined features.
+  * 1. "predefinedFeatures": default option; a pretrained version of the mutagenesis model on mESC insertions is used.
+  * 2. "pretrainedModel": the mutagenesis model is retrained on your data using our predefined features.
   * 3. "null": no mutagenesis model is applied, Transmicron contols only for the distribution of TA / TTAA nucleotides.
   * 4. filepath: please supply one or more filepaths to BED files containing feature information. The mutagenesis model is retrained using the distance of insertions to these features as input.
 * annotation: Please Specify the target annotation used to identify CIS. Options: 1. "genes" [default] 2. "10kb", "20kb"...[any binlength] 3. filepath [specify a filepath to a BED file file custom features of interest, e.g. regulatory elementes]
@@ -74,11 +80,6 @@ python run.py --snakemakeRule="--until defineMutagenesisFeatures --cores 8" # ru
 
 The code is written in R and python and tested on python 3.9 and a Linux OS but should run on any OS. 
 
-
-[comment]: <> (
-## Required Ressources
-The ressources required strongly depend on which parameters you choose above. On the test data, using default parameters, roghly XX mb of memory are reuiqred. The pipeline takes roughly xx minutes to run. 
-)
 
 ## Features and Annotations
 By default the following datasets are used:
