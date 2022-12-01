@@ -9,11 +9,12 @@
 ################################################
 # load packages
 ################################################
+suppressPackageStartupMessages({
 library(GenomicFeatures)
 library(data.table)
 library(regioneR)
 library(GenomicRanges)
-
+})
 #load genome
 #Tx <- makeTxDbFromGFF("/s/project/transposon/Output/PublishedPipeline/Input/Annotations/Genes/mm10.refGene.gtf.gz", format = "gtf")
 Tx <- makeTxDbFromGFF(snakemake@params[["REFSEQgtf"]], format = "gtf")

@@ -10,7 +10,7 @@
 ##################################################
 # load packages
 ##################################################
-
+suppressPackageStartupMessages({
 library(GenomicFeatures)
 library(TxDb.Mmusculus.UCSC.mm10.knownGene)
 library(BSgenome.Mmusculus.UCSC.mm10)
@@ -20,7 +20,7 @@ library(regioneR)
 library(tidymodels)
 library(caret)
 library(dplyr)
-
+})
 ########################################
 #read input
 ########################################

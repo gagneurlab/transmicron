@@ -8,10 +8,12 @@
 ################################################
 #load packages
 ################################################
+suppressPackageStartupMessages({
 library(GenomicRanges)
 library(data.table)
 library(regioneR)
 library(BSgenome.Mmusculus.UCSC.mm10)
+})
 ################################################
 #read input
 ################################################

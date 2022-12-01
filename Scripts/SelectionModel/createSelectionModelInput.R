@@ -8,10 +8,11 @@
 # #load packages
 ##################################################
 #load packages
+suppressPackageStartupMessages({
 library(data.table)
 library(GenomicRanges)
 library(dplyr)
-
+})
 ##################################################
 # #read input
 ##################################################

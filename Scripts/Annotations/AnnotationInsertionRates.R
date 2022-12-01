@@ -7,13 +7,13 @@
 #########################
 # load packages
 #########################
-
+suppressPackageStartupMessages({
 library(regioneR)
 library(data.table)
 library(BSgenome.Mmusculus.UCSC.mm10)
 library(dplyr)
 library(org.Mm.eg.db)
-
+})
 #########################
 # define functions
 #########################

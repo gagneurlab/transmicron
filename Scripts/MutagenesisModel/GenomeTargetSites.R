@@ -8,7 +8,7 @@
 ##################################################
 # load packages
 ##################################################
-
+suppressPackageStartupMessages({
 library(GenomicRanges)
 library(GenomicFeatures)
 library(tidymodels)
@@ -19,7 +19,7 @@ library(data.table)
 library(BSgenome.Mmusculus.UCSC.mm10)
 library(rhdf5)
 library(stringr)
-
+})
 #prepare HDF5 session; might fail otherwise
 h5closeAll()
 h5disableFileLocking()

@@ -7,11 +7,12 @@
 #####################################################
 # load packages
 #####################################################
+suppressPackageStartupMessages({
 library(data.table)
 library(doParallel)
 library(MASS)
 library(dplyr)
-
+})
 #####################################################
 #read input data
 #####################################################
