@@ -41,7 +41,7 @@ python run.py --insertionFile="Input/BEDInsertionTesting/DLBCLPB.BED" -transposo
 ```
 You can define several parameters to these commands, depending on how you want to run Transmicron. All the parameters are listed in the next section with their default value. The program sets the default value to any parameter that is not defined by the user.
 <details>
-    <summary>Parameters and Default Values</summary>
+    <summary>Running with full Parameters and Default Values (Click to Expand)</summary>
 
 ```
 python run.py \
