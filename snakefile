@@ -1,7 +1,7 @@
 import pathlib
 from pathlib import Path
 configfile: "./user_config.yaml"
-
+import sys
 
 #dictionary to map dataset name to insertion BED-file
 insertionFilesZIP = zip(config["datasets"], config["insertionFile"])
@@ -10,7 +10,20 @@ insertionFilesDict = dict(insertionFilesZIP)
 insertionFilesDict["unselectedPB"] = "Input/BEDInsertionTesting/PBmESC.BED"
 insertionFilesDict["unselectedSB"] = "Input/BEDInsertionTesting/SBmESC.BED"
 
+config['download_dir'] = 'PrecomputedData'
+download_dir = Path(config['download_dir'] +"/Input")
+use_precomputed_features = config['usePrecomputedFeatures']
+feature_directory = Path("Input")
+if use_precomputed_features == 'True' or use_precomputed_features == 'true':
+    feature_directory = download_dir
+
+
 output_dir = Path(config['outputDir'])
+
+
+
+
+
 
 #ressources needed to build the feature matrices for all TTAA / TA sites in the genome
 model_resources = {
@@ -95,7 +108,29 @@ rule target:
     input: 
         input_target_rule
 
-    
+
+if use_precomputed_features == True:
+  
+    rule downloadPrecomputedInput:
+        output:
+            expand("{download_dir}/{transposonSystem}/InputFeaturesMutagenesis/featureList_precompFeatures.RData", download_dir = feature_directory , transposonSystem = ['PB', 'SB']),
+            expand("{download_dir}/{transposonSystem}/InputFeaturesMutagenesis/granges_negatives_controls_precompFeatures.RData", download_dir = feature_directory , transposonSystem = ['PB', 'SB']),
+            expand("{download_dir}/{transposonSystem}/InputFeaturesMutagenesis/one_bp_ranges_negatives_precompFeatures.RData", download_dir = feature_directory , transposonSystem = ['PB', 'SB']),
+            expand("{download_dir}/{transposonSystem}/InputFeaturesMutagenesis/one_hot_encoder_precompFeatures.RData", download_dir = feature_directory , transposonSystem = ['PB', 'SB']),
+            expand("{download_dir}/{transposonSystem}/InputFeaturesMutagenesis/step1_input_negatives_controls_precompFeatures.RData", download_dir = feature_directory , transposonSystem = ['PB', 'SB']),
+            expand("{download_dir}/{transposonSystem}/InputFeaturesMutagenesis/step1_input_negatives_whole_genome_precompFeatures.h5", download_dir = feature_directory , transposonSystem = ['PB', 'SB']),
+            expand("{download_dir}/{transposonSystem}/InsertionRates/Genomewide_precompInsRates_precompFeatures.csv", download_dir = feature_directory,  transposonSystem = ['PB', 'SB']),
+        
+        run:
+            shell("wget https://zenodo.org/record/7373066/files/Input.zip?download=1"),
+            shell("unzip -d " + config['download_dir']  + " -o Input.zip?download=1 && rm Input.zip?download=1")
+
+        
+     
+
+
+
+
 ##########################################################################
 #Step 0: Preprocess user input
 ##########################################################################
@@ -116,10 +151,11 @@ rule processInsertionFile:
 
 #dictionary to assign path for the feature tables (we supply precomputed files for our predefined features)
 pathNegatives = {
-    "precompFeatures" : "Input", #if predefined features: use precomputed files
+    "precompFeatures" : str(feature_directory) , #if predefined features: use precomputed files
     "OnlyCustomFeatures" : "{dataset}", #else: recompute tables
     "AddCustomFeatures" : "{dataset}"
 }
+
 
 
 rule defineMutagenesisFeatures:
@@ -129,7 +165,7 @@ rule defineMutagenesisFeatures:
         ATAC_mESC = "Input/FeatureBeds/ATACmesc_SRX2514792.bed",
         customFeatures = config["customFeatures"],#list of Bed-files, user might supply to control for
     output:
-        featureList = "Input/{transposonSystem}/InputFeaturesMutagenesis/featureList_{mutaFeatures}.RData"
+        featureList = feature_directory / "{transposonSystem}/InputFeaturesMutagenesis/featureList_{mutaFeatures}.RData"
     script:
         "Scripts/MutagenesisModel/createInputFeatures.R"
     
@@ -155,7 +191,7 @@ rule prepareAnnoation:
 #create PRECALCULATED feature table with all TTAA / TA sites in the genome
 rule GenomeTargetSitesPrecomp: 
     input:
-        featureList = "Input/{transposonSystem}/InputFeaturesMutagenesis/featureList_{mutaFeatures}.RData"
+        featureList = feature_directory / "{transposonSystem}/InputFeaturesMutagenesis/featureList_{mutaFeatures}.RData"
     params:
         InputFunctions = workflow.source_path("Scripts/MutagenesisModel/define_functions.R"), #script containing functions to create input matrices 
         mutagenesis_method = config["mutagenesis_method"],
@@ -163,11 +199,11 @@ rule GenomeTargetSitesPrecomp:
     resources:
         mem_mb = lambda wildcards: model_resources[wildcards.transposonSystem]['mem_mb']
     output:
-        one_hot_encoder = "Input/{transposonSystem}/InputFeaturesMutagenesis/one_hot_encoder_{mutaFeatures}.RData",
-        granges_negatives_controls = "Input/{transposonSystem}/InputFeaturesMutagenesis/granges_negatives_controls_{mutaFeatures}.RData",
-        step1_input_negatives_controls = "Input/{transposonSystem}/InputFeaturesMutagenesis/step1_input_negatives_controls_{mutaFeatures}.RData",
-        one_bp_ranges_negatives ="Input/{transposonSystem}/InputFeaturesMutagenesis/one_bp_ranges_negatives_{mutaFeatures}.RData",
-        step1_input_negatives_whole_genome = "Input/{transposonSystem}/InputFeaturesMutagenesis/step1_input_negatives_whole_genome_{mutaFeatures}.h5"
+        one_hot_encoder = feature_directory / "{transposonSystem}/InputFeaturesMutagenesis/one_hot_encoder_{mutaFeatures}.RData",
+        granges_negatives_controls = feature_directory / "{transposonSystem}/InputFeaturesMutagenesis/granges_negatives_controls_{mutaFeatures}.RData",
+        step1_input_negatives_controls = feature_directory / "{transposonSystem}/InputFeaturesMutagenesis/step1_input_negatives_controls_{mutaFeatures}.RData",
+        one_bp_ranges_negatives = feature_directory / "{transposonSystem}/InputFeaturesMutagenesis/one_bp_ranges_negatives_{mutaFeatures}.RData",
+        step1_input_negatives_whole_genome = feature_directory / "{transposonSystem}/InputFeaturesMutagenesis/step1_input_negatives_whole_genome_{mutaFeatures}.h5"
     script:
         "Scripts/MutagenesisModel/GenomeTargetSites.R"
 
@@ -175,7 +211,7 @@ rule GenomeTargetSitesPrecomp:
 #reaclculate the feature table with all TTAA / TA sites in the genome (needed if user supplies their own features)
 rule GenomeTargetSitesNew: 
     input:
-        featureList ="Input/{transposonSystem}/InputFeaturesMutagenesis/featureList_{mutaFeatures}.RData"
+        featureList = feature_directory / "{transposonSystem}/InputFeaturesMutagenesis/featureList_{mutaFeatures}.RData"
     params:
         InputFunctions = workflow.source_path("Scripts/MutagenesisModel/define_functions.R"), #script containing functions to create input matrices 
         mutagenesis_method = config["mutagenesis_method"],
@@ -197,7 +233,7 @@ ruleorder: GenomeTargetSitesPrecomp > GenomeTargetSitesNew
 
 rule MutagenesisModelInput:
     input:
-        featureList ="Input/{transposonSystem}/InputFeaturesMutagenesis/featureList_{mutaFeatures}.RData",
+        featureList = feature_directory / "{transposonSystem}/InputFeaturesMutagenesis/featureList_{mutaFeatures}.RData",
         Granges_insertions = output_dir / "{dataset}/{transposonSystem}/Granges_insertions.RData",
         one_hot_encoder = lambda wildcards: "/".join([pathNegatives[wildcards.mutaFeatures],"{transposonSystem}/InputFeaturesMutagenesis/one_hot_encoder_{mutaFeatures}.RData"]),
          granges_negatives_controls = lambda wildcards: "/".join([pathNegatives[wildcards.mutaFeatures],"{transposonSystem}/InputFeaturesMutagenesis/granges_negatives_controls_{mutaFeatures}.RData"]),
@@ -275,13 +311,13 @@ rule predictInsertionRatesPRECOMPUTED:
     resources:
         mem_mb=100000
     output:               
-        InsertionRatesGenome = "Input/{transposonSystem}/InsertionRates/Genomewide_precompInsRates_precompFeatures.csv"
+        InsertionRatesGenome = feature_directory / "{transposonSystem}/InsertionRates/Genomewide_precompInsRates_precompFeatures.csv"
     script:
         "Scripts/MutagenesisModel/predictInsertionRatesGenome.py"
 
 rule NULL_model_predictionsPRECOMPUTED:
     input:
-        step1_input_negatives_whole_genome = "Input/{transposonSystem}/InputFeaturesMutagenesis/step1_input_negatives_whole_genome_precompFeatures.h5"
+        step1_input_negatives_whole_genome = feature_directory / "{transposonSystem}/InputFeaturesMutagenesis/step1_input_negatives_whole_genome_precompFeatures.h5"
     resources:
         mem_mb=100000
     output:               
@@ -313,12 +349,12 @@ pathInsertion = {
 
 rule matrixInsRatesPrecomp:
     input:
-        InsertionRatesGenome = "Input/{transposonSystem}/InsertionRates/Genomewide_precompInsRates_precompFeatures.csv",
+        InsertionRatesGenome = feature_directory / "{transposonSystem}/InsertionRates/Genomewide_precompInsRates_precompFeatures.csv",
         #InsertionRatesGenome = "Input/{transposonSystem}/InsertionRates/Genomewide_precompInsRates_precompFeatures.csv",
-        one_bp_ranges_negatives = "Input/{transposonSystem}/InputFeaturesMutagenesis/one_bp_ranges_negatives_precompFeatures.RData",
+        one_bp_ranges_negatives = feature_directory / "{transposonSystem}/InputFeaturesMutagenesis/one_bp_ranges_negatives_precompFeatures.RData",
         AnnotationGRanges = "Input/Annotations/{annotation}/AnnotationGRanges.RData"
     output:
-        AnnotationMatrix= "Input/{transposonSystem}/{annotation}/AnnotationMatrix_precompInsRates_precompFeatures.RData"
+        AnnotationMatrix= feature_directory / "{transposonSystem}/{annotation}/AnnotationMatrix_precompInsRates_precompFeatures.RData"
     resources:
         mem_mb=60000
     script:

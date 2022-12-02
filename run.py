@@ -20,6 +20,8 @@ def get_args() -> Namespace:
     parser.add_argument("--snakemakeRule", default="--cores 8", type=str)
     parser.add_argument("--customFeatures", default="Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed,Input/FeatureBeds/DNASEmesc_SRX1452763.05.bed", type=str) 
     parser.add_argument("--outputDir", default="Output", type=str,)
+    parser.add_argument("--downloadDir", default="PrecomputedData", type=str,)
+    parser.add_argument("--usePrecomputedFeatures", default="True", type=str,)
     return parser.parse_args()
 
 
@@ -51,7 +53,6 @@ args['mutagenesis_method'] = list(map(lambda mu_model: mu_model.replace('null', 
 del(args['mutagenesisMethod'])
 args['annotation'], args['customAnnotation'] = get_annotation(args['annotation'].split(','))
 args['customFeatures'] = args['customFeatures'].split(',')
-args['outputDir'] = args['outputDir']
 
 with open('./user_config.yaml', 'w') as file:
     documents = yaml.dump(args, file, default_flow_style=False)
