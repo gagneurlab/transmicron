@@ -37,7 +37,7 @@ Column headers for columns 4 and 5 should be "orientation" and "TumorID" (other 
 5. Run the whole Transmicron pipeline using [Snakemake](https://snakemake.readthedocs.io/en/stable/)  by the following commands:
 ```
 python run.py --snakemakeRule="-n" #dry run
-python run.py --insertionFile="Input/BEDInsertionTesting/DLBCLPB.BED" -transposonSystem="PB" --snakemakeRule="--cores 4"
+python run.py --insertionFile="Input/BEDInsertionTesting/DLBCLPB.BED" --transposonSystem="PB" --snakemakeRule="--cores 4"
 ```
 You can define several parameters to these commands, depending on how you want to run Transmicron. All the parameters are listed in the next section with their default value. The program sets the default value to any parameter that is not defined by the user.
 <details>
