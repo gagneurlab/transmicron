@@ -10,8 +10,8 @@ insertionFilesDict = dict(insertionFilesZIP)
 insertionFilesDict["unselectedPB"] = "Input/BEDInsertionTesting/PBmESC.BED"
 insertionFilesDict["unselectedSB"] = "Input/BEDInsertionTesting/SBmESC.BED"
 
-config['download_dir'] = 'PrecomputedData'
-download_dir = Path(config['download_dir'] +"/Input")
+
+download_dir = Path(config['downloadDir'] +"/Input")
 use_precomputed_features = config['usePrecomputedFeatures']
 feature_directory = Path("Input")
 if use_precomputed_features == 'True' or use_precomputed_features == 'true':
@@ -53,7 +53,9 @@ glm_resources = {
     "PRIM_dataset": {"mem_mb": 160000},
     "Intestinal": {"mem_mb": 250000},
     "unselectedYohsibaPBIllumina": {"mem_mb": 60000},
-    "cuSCC": {"mem_mb": 60000}}
+    "cuSCC": {"mem_mb": 60000},
+    "T-cell_Transmicron": {"mem_mb": 60000},
+    }
     
 
 transposon_system = {
@@ -79,7 +81,9 @@ transposon_system = {
     "PRIM_dataset": {"transposon_system": "SB"},
     "Intestinal": {"transposon_system": "SB"},
     "unselectedYohsibaPBIllumina":  {"transposon_system": "PB"},
-    "cuSCC":  {"transposon_system": "SB"}}
+    "cuSCC":  {"transposon_system": "SB"},
+    "T-cell_Transmicron": {"transposon_system": "PB"},
+    }
 
  
 #####################################################################################
@@ -89,7 +93,7 @@ transposon_system = {
 #loop through "datasets" and "transposonSystem" in config-file
 input_target_rule=list()
 for i in range(0, len(config["datasets"])):
-    
+    print(config["datasets"])
     if("pretrainedModel" in config["mutagenesis_method"]):
         input_target_rule.append(expand("{outputDir}/{dataset}/{transposonSystem}/results/results_{annotation}_{insertionRates}_{mutaFeatures}.csv", outputDir = config['outputDir'], dataset=config["datasets"][i], annotation=config["annotation"], transposonSystem=config["transposonSystem"][i], insertionRates = "precompInsRates",mutaFeatures = "precompFeatures" ))
 
@@ -109,7 +113,7 @@ rule target:
         input_target_rule
 
 
-if use_precomputed_features == True:
+if use_precomputed_features == 'True' or use_precomputed_features == 'true':
   
     rule downloadPrecomputedInput:
         output:
@@ -123,7 +127,7 @@ if use_precomputed_features == True:
         
         run:
             shell("wget https://zenodo.org/record/7373066/files/Input.zip?download=1"),
-            shell("unzip -d " + config['download_dir']  + " -o Input.zip?download=1 && rm Input.zip?download=1")
+            shell("unzip -d " + config['downloadDir']  + " -o Input.zip?download=1 && rm Input.zip?download=1")
 
         
      
@@ -257,7 +261,7 @@ rule MutagenesisModelInput:
 
 rule trainMutagenesisModel:
     input:
-        MutagenesisTrainingData = output_dir / "{dataset}/{transposonSystem}/MutagenesisTrainingData_{mutaFeatures}.RData" # @ata: we could change how we transfer files between R and python from .RData files to .csv; alternatively, we could dimplement the model in r
+        MutagenesisTrainingData = output_dir / "{dataset}/{transposonSystem}/MutagenesisTrainingData_{mutaFeatures}.RData" # @ata: we could change how we transfer files between R and python from .RData files to .csv; alternatively, we could implement the model in r
     output:
         MutagenesisModel = output_dir / "{dataset}/{transposonSystem}/MutagenesisModel_{mutaFeatures}.pickle"
     resources:

@@ -10,7 +10,6 @@ def get_args() -> Namespace:
     """
 
     parser = ArgumentParser(description="parameters")
-    parser.add_argument("--datasets", default='DLBCLPB', type=str,)
     parser.add_argument("--insertionFile", default='Input/BEDInsertionTesting/DLBCLPB.BED', type=str,)
     parser.add_argument("--transposonSystem", default='PB', type=str,)
     parser.add_argument("--mutagenesisMethod", default='predefinedFeatures', type=str,)
@@ -43,8 +42,9 @@ def get_annotation(annot):
 
 args = get_args()
 args = vars(args)
-args['datasets'] = args['datasets'].split(',')
+
 args['insertionFile'] = args['insertionFile'].split(',')
+args['datasets'] = list(map(lambda x: x.split('/')[-1][:-4], args['insertionFile']))
 args['transposonSystem'] = args['transposonSystem'].split(',')
 args['multest_correction'] = args['multestCorrection'].split(',')
 del(args['multestCorrection'])
