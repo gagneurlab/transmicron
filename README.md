@@ -102,5 +102,18 @@ Gene annotation:
 
 All files are provided in Input folder.
 Other input BED files used in our analysis can be found in projects [zenodo page](https://zenodo.org/record/7352017).
+
+## Citation
+If you use Transmicron in your research, please cite our [manuscript](https://academic.oup.com/nar/advance-article/doi/10.1093/nar/gkac1215/6976062).
+```
+@article{10.1093/nar/gkac1215,
+    author = {Bredthauer, Carl and Fischer, Anja and Ahari, Ata Jadid and Cao, Xueqi and Weber, Julia and Rad, Lena and Rad, Roland and Wachutka, Leonhard and Gagneur, Julien},
+    title = "{Transmicron: accurate prediction of insertion probabilities improves detection of cancer driver genes from transposon mutagenesis screens}",
+    journal = {Nucleic Acids Research},
+    year = {2023},
+    doi = {10.1093/nar/gkac1215},
+    url = {https://doi.org/10.1093/nar/gkac1215},
+}
+```
 ## Acknowledgements and Funding
 This work was supported by the German Bundesministerium für Bildung und Forschung (BMBF) supported the study through the VALE (Entdeckung und Vorhersage der Wirkung von genetischen Varianten durch Artifizielle Intelligenz für LEukämie Diagnose und Subtyp-Identifizierung) project (031L0203B to CB, XQ and JG)
